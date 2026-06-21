@@ -68,11 +68,9 @@ The system tracks the progress of the animal rescue project, specifically monito
 * **Allow personnel assignments:** Allow dispatchers to assign field rescuers and select housing shelters for specific rescue cases.
 
 ##### 1.3.2 Limitation
-The system records operational case reports, medical treatments, and shelter capacities, but it cannot process payments or active financial transactions.
-
-**Limitations and exclusions**
-* **The system will be coupled with the home office database only:** The data store will communicate exclusively with the centralized organization database.
-* **The system will not replace any existing communication modes, e.g., email:** Standard operations will still rely on existing tools like email or phone calls for real-time alerts.
+* **Tethered Database Model:** RescueHub will be coupled directly with the organization’s central database and does not support multi-tenant configurations for separate external organizations.
+* **Communication Modes:** The platform will manage operational logs but will not replace existing communication channels (e.g., phone call hotlines, VHF radios, or email clients).
+* **Payment Gateways:** The initial release does not process financial donations, adoption fee transactions, or vet billing directly; it only records audit entries, leaving payment processing to manual workflows.
 
 ---
 
