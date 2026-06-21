@@ -245,20 +245,20 @@ gantt
     title RescueHub MVP Development Timeline
     dateFormat  YYYY-MM-DD
     section Requirement Engineering
-    Define Datasets & Scopes          :done,    des1, 2026-06-01, 2026-06-03
-    Draft Relational Schema           :done,    des2, 2026-06-03, 2026-06-05
+    Define Datasets & Scopes          :done,    des1, 2026-06-15, 2026-06-19
+    Draft Relational Schema           :done,    des2, 2026-06-19, 2026-06-22
     section Store & Local Schema
-    Zustand Store & Actions Setup     :done,    sto1, 2026-06-05, 2026-06-07
-    LocalStorage Persistence Loop     :done,    sto2, 2026-06-07, 2026-06-09
+    Zustand Store & Actions Setup     :active,  sto1, 2026-06-22, 2026-06-26
+    LocalStorage Persistence Loop     :         sto2, 2026-06-26, 2026-06-29
     section UI & CRUD Features
-    Admin Sidebar & Navigation        :done,    ui1,  2026-06-09, 2026-06-11
-    Telemetry Widgets & Graphs        :done,    ui2,  2026-06-11, 2026-06-13
-    CRUD Data Tables (Animals, Meds)  :done,    ui3,  2026-06-13, 2026-06-15
+    Admin Sidebar & Navigation        :         ui1,  2026-06-29, 2026-07-03
+    Telemetry Widgets & Graphs        :         ui2,  2026-07-03, 2026-07-07
+    CRUD Data Tables (Animals, Meds)  :         ui3,  2026-07-07, 2026-07-10
     section Map Pinning Integration
-    Interactive Google Map Overlay    :done,    map1, 2026-06-15, 2026-06-17
+    Interactive Google Map Overlay    :         map1, 2026-07-10, 2026-07-16
     section Quality & Release
-    ESLint Code Cleanup & Squashing   :done,    rel1, 2026-06-17, 2026-06-18
-    GitHub Repository Deploy          :active,  rel2, 2026-06-18, 2026-06-19
+    ESLint Code Cleanup & Squashing   :         rel1, 2026-07-16, 2026-07-20
+    GitHub & Vercel Deploy            :         rel2, 2026-07-20, 2026-07-24
 ```
 
 #### 2.8 User Interface
