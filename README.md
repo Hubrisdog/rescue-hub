@@ -13,17 +13,7 @@
 
 ---
 
-## 👥 Authors & Project Team
 
-| Student Author | Role / Contributions |
-| :--- | :--- |
-| **Garado, Al Philippe Abrenzosa** | Full-Stack Development, System Architecture & Lead Developer |
-| **Gerson, Christian Jake** | Backend API & Database Normalization (Prisma/MySQL) |
-| **Piczon, Jan Gethree Abrenzosa** | Requirements Engineering, Documentation & SRS |
-| **Saya-ang, Ian Dane** | UI/UX Design & Dashboard Analytics |
-| **Young, Jon Michael Quimiguing** | Testing, Quality Assurance & Security Audit |
-
----
 
 ## 📖 Table of Contents
 1. [Executive Summary & Rationale](#-executive-summary--rationale)
