@@ -226,12 +226,19 @@ npm run prisma:seed
 ```
 
 ### 4. Run Development Servers
+
+You can launch both the frontend and backend development servers manually:
 ```bash
 # In server directory:
 npm run dev
 
 # In a new terminal (root directory):
 npm run dev
+```
+
+Alternatively, you can run the automated startup script in Windows PowerShell:
+```powershell
+powershell -ExecutionPolicy Bypass -File .\start-dev.ps1
 ```
 
 Open your browser at `http://localhost:5173` to view **RescueHub**!
