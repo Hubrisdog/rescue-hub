@@ -207,8 +207,8 @@ ORDER BY occupancy_percentage DESC;
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/Hubrisdog/rescue-hub-im2-system.git
-cd rescue-hub-im2-system
+git clone https://github.com/Hubrisdog/rescue-hub.git
+cd rescue-hub
 ```
 
 ### 2. Configure Environment Variables
@@ -245,6 +245,28 @@ npm run dev
 ```
 
 Open your browser at `http://localhost:5173` to view **RescueHub**!
+
+---
+
+## 🛠️ Production Stabilization & Hotfixes (July 2026 Release)
+
+To prepare **RescueHub** for a live deployment and defense, the codebase underwent a rigorous security audit, stabilization phase, and bug-fixing pipeline. The following production-grade hotfixes were implemented:
+
+1. **Assigned Rescuer Flow Synchronization:**
+   * Resolved a database-to-API discrepancy where seeded rescuers (e.g. Mark Davis) had `NULL` team IDs in the database.
+   * Standardized the backend update and promotion controllers to implement role-based team fallbacks (Team 1 for Rescuers, 2 for Dispatchers, 3 for Vets), aligning the database writes with the read API mappings.
+   * Integrated front-end team-to-member resolution in the tables, dropdowns, and details drawers.
+2. **Medical Recommendation & Outcome Progression:**
+   * Redesigned the veterinary recommendations to clear animals as `Recovered` (Medically Cleared), decoupling medical certification from adoption decisions.
+   * Integrated the outcomes flow in the Animal Registry so that cleared animals can be promoted to `Ready for Adoption` (domestic species) or `Ready for Release` (wild species).
+   * Synced all treatment progress bars and completed filters.
+3. **Rescue Date Validation:**
+   * Fixed payload serialization to ensure case rescue dates are accurately tracked and stored, with automatic backend timestamp logging when a case advances to the `RESCUED` state.
+4. **Case-Insensitive Species Checks:**
+   * Standardized all species and status calculations to be case-insensitive, protecting the frontend filters and timelines from casing variances in user-entered species names (e.g. `Bird` vs `bird`).
+5. **Security & Session Management:**
+   * Corrected JWT expiration countdown rendering in the user account panel, removing redundant millisecond multipliers.
+   * Added demo bypass login helpers for rapid verification during defense.
 
 ---
 
