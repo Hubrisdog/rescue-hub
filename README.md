@@ -9,7 +9,6 @@
 > Presented to the Faculty of the Department of Computer, Information Sciences and Mathematics  
 > **University of San Carlos — Talamban Campus, Cebu City**  
 > **Instructor:** Mr. Edwin Bartlett  
-> **Date:** July 2026  
 
 ---
 
