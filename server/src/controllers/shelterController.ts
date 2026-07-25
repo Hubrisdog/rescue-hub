@@ -121,6 +121,11 @@ export const deleteShelter = async (req: Request, res: Response) => {
 
     res.json({ message: 'Shelter deleted successfully' })
   } catch (error: any) {
+    if (error.code === 'P2003') {
+      return res.status(400).json({
+        message: 'Cannot delete shelter: It has active animal or volunteer team assignments associated with it.'
+      })
+    }
     res.status(500).json({ message: error.message })
   }
 }

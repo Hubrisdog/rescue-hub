@@ -180,11 +180,15 @@ export function RescueCases() {
     setIsDeleteOpen(true)
   }
 
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
     if (!selectedCase) return
-    store.deleteCase(selectedCase.id)
+    const err = await store.deleteCase(selectedCase.id)
+    if (err) {
+      toast.error(err)
+    } else {
+      toast.success(`Rescue Case ${selectedCase.case_number} deleted.`)
+    }
     setIsDeleteOpen(false)
-    toast.success(`Rescue Case ${selectedCase.case_number} deleted.`)
   }
 
   // Enhanced Filtering

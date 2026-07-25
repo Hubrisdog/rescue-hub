@@ -147,6 +147,11 @@ export const deleteIncident = async (req: Request, res: Response) => {
 
     res.json({ message: 'Incident deleted successfully' })
   } catch (error: any) {
+    if (error.code === 'P2003') {
+      return res.status(400).json({
+        message: 'Cannot delete incident report: It has already been promoted to an active rescue case.'
+      })
+    }
     res.status(500).json({ message: error.message })
   }
 }

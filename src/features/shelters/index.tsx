@@ -97,11 +97,15 @@ export function Shelters() {
     setIsDeleteOpen(true)
   }
 
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
     if (!selectedShelter) return
-    store.deleteShelter(selectedShelter.id)
+    const err = await store.deleteShelter(selectedShelter.id)
+    if (err) {
+      toast.error(err)
+    } else {
+      toast.success(`Shelter '${selectedShelter.name}' deleted.`)
+    }
     setIsDeleteOpen(false)
-    toast.success(`Shelter '${selectedShelter.name}' deleted.`)
   }
 
   // Filters

@@ -151,33 +151,33 @@ interface RescueHubState {
   // Incidents CRUD
   addIncident: (incident: Omit<IncidentReport, 'id' | 'created_at'>) => void
   updateIncident: (id: string, incident: Partial<IncidentReport>) => void
-  deleteIncident: (id: string) => void
+  deleteIncident: (id: string) => Promise<string | null>
   promoteIncidentToCase: (id: string, rescuerId?: string | null, shelterId?: string | null) => Promise<string | null>
 
   // Cases CRUD
   addCase: (rescueCase: Omit<RescueCase, 'id' | 'created_at' | 'case_number'>) => void
   updateCase: (id: string, rescueCase: Partial<RescueCase>) => string | null
-  deleteCase: (id: string) => void
+  deleteCase: (id: string) => Promise<string | null>
 
   // Animals CRUD
   addAnimal: (animal: Omit<Animal, 'id' | 'created_at'>) => void
   updateAnimal: (id: string, animal: Partial<Animal>) => void
-  deleteAnimal: (id: string) => void
+  deleteAnimal: (id: string) => Promise<string | null>
 
   // Rescuers CRUD
   addRescuer: (rescuer: Omit<Rescuer, 'id' | 'created_at'>) => void
-  updateRescuer: (id: string, rescuer: Partial<Rescuer>) => void
-  deleteRescuer: (id: string) => void
+  updateRescuer: (id: string, rescuers: Partial<Rescuer>) => void
+  deleteRescuer: (id: string) => Promise<string | null>
 
   // Shelters CRUD
   addShelter: (shelter: Omit<Shelter, 'id' | 'created_at'>) => void
   updateShelter: (id: string, shelter: Partial<Shelter>) => void
-  deleteShelter: (id: string) => void
+  deleteShelter: (id: string) => Promise<string | null>
 
   // Treatments CRUD
   addTreatment: (treatment: Omit<Treatment, 'id' | 'created_at'>) => void
   updateTreatment: (id: string, treatment: Partial<Treatment>) => void
-  deleteTreatment: (id: string) => void
+  deleteTreatment: (id: string) => Promise<string | null>
 }
 
 // Validation rules - Full operational status flexibility for dispatchers & administrators
@@ -295,13 +295,19 @@ export const useRescueHubStore = create<RescueHubState>()((set, get) => {
 
     deleteIncident: async (id) => {
       try {
-        await fetch(`http://localhost:5000/api/incidents/${id}`, {
+        const res = await fetch(`http://localhost:5000/api/incidents/${id}`, {
           method: 'DELETE',
           headers: getHeaders()
         })
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}))
+          return errData.message || 'Failed to delete incident report.'
+        }
         get().fetchInitialData()
-      } catch (e) {
+        return null
+      } catch (e: any) {
         console.error(e)
+        return e.message || 'Failed to connect to the server.'
       }
     },
 
@@ -379,13 +385,19 @@ export const useRescueHubStore = create<RescueHubState>()((set, get) => {
 
     deleteCase: async (id) => {
       try {
-        await fetch(`http://localhost:5000/api/tickets/${id}`, {
+        const res = await fetch(`http://localhost:5000/api/tickets/${id}`, {
           method: 'DELETE',
           headers: getHeaders()
         })
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}))
+          return errData.message || 'Failed to delete rescue case.'
+        }
         get().fetchInitialData()
-      } catch (e) {
+        return null
+      } catch (e: any) {
         console.error(e)
+        return e.message || 'Failed to connect to the server.'
       }
     },
 
@@ -418,13 +430,19 @@ export const useRescueHubStore = create<RescueHubState>()((set, get) => {
 
     deleteAnimal: async (id) => {
       try {
-        await fetch(`http://localhost:5000/api/animals/${id}`, {
+        const res = await fetch(`http://localhost:5000/api/animals/${id}`, {
           method: 'DELETE',
           headers: getHeaders()
         })
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}))
+          return errData.message || 'Failed to delete animal record.'
+        }
         get().fetchInitialData()
-      } catch (e) {
+        return null
+      } catch (e: any) {
         console.error(e)
+        return e.message || 'Failed to connect to the server.'
       }
     },
 
@@ -457,13 +475,19 @@ export const useRescueHubStore = create<RescueHubState>()((set, get) => {
 
     deleteRescuer: async (id) => {
       try {
-        await fetch(`http://localhost:5000/api/agents/${id}`, {
+        const res = await fetch(`http://localhost:5000/api/agents/${id}`, {
           method: 'DELETE',
           headers: getHeaders()
         })
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}))
+          return errData.message || 'Failed to delete rescuer.'
+        }
         get().fetchInitialData()
-      } catch (e) {
+        return null
+      } catch (e: any) {
         console.error(e)
+        return e.message || 'Failed to connect to the server.'
       }
     },
 
@@ -496,13 +520,19 @@ export const useRescueHubStore = create<RescueHubState>()((set, get) => {
 
     deleteShelter: async (id) => {
       try {
-        await fetch(`http://localhost:5000/api/shelters/${id}`, {
+        const res = await fetch(`http://localhost:5000/api/shelters/${id}`, {
           method: 'DELETE',
           headers: getHeaders()
         })
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}))
+          return errData.message || 'Failed to delete shelter.'
+        }
         get().fetchInitialData()
-      } catch (e) {
+        return null
+      } catch (e: any) {
         console.error(e)
+        return e.message || 'Failed to connect to the server.'
       }
     },
 
@@ -535,13 +565,19 @@ export const useRescueHubStore = create<RescueHubState>()((set, get) => {
 
     deleteTreatment: async (id) => {
       try {
-        await fetch(`http://localhost:5000/api/treatments/${id}`, {
+        const res = await fetch(`http://localhost:5000/api/treatments/${id}`, {
           method: 'DELETE',
           headers: getHeaders()
         })
+        if (!res.ok) {
+          const errData = await res.json().catch(() => ({}))
+          return errData.message || 'Failed to delete treatment.'
+        }
         get().fetchInitialData()
-      } catch (e) {
+        return null
+      } catch (e: any) {
         console.error(e)
+        return e.message || 'Failed to connect to the server.'
       }
     }
   }

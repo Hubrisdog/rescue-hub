@@ -253,6 +253,11 @@ export const deleteTicket = async (req: Request, res: Response) => {
 
     res.json({ message: 'Ticket deleted successfully' })
   } catch (error: any) {
+    if (error.code === 'P2003') {
+      return res.status(400).json({
+        message: 'Cannot delete rescue case: It has active animal or medical treatment records associated with it.'
+      })
+    }
     res.status(500).json({ message: error.message })
   }
 }

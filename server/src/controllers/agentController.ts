@@ -217,6 +217,11 @@ export const deleteAgent = async (req: Request, res: Response) => {
 
     res.json({ message: 'Agent deleted successfully' })
   } catch (error: any) {
+    if (error.code === 'P2003') {
+      return res.status(400).json({
+        message: 'Cannot delete personnel profile: They are currently associated with active rescue cases, shelter management, or veterinary treatment records.'
+      })
+    }
     res.status(500).json({ message: error.message })
   }
 }

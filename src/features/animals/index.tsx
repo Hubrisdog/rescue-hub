@@ -196,11 +196,15 @@ export function Animals() {
     setIsDeleteOpen(true)
   }
 
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
     if (!selectedAnimal) return
-    store.deleteAnimal(selectedAnimal.id)
+    const err = await store.deleteAnimal(selectedAnimal.id)
+    if (err) {
+      toast.error(err)
+    } else {
+      toast.success(`Animal record for "${selectedAnimal.name}" deleted.`)
+    }
     setIsDeleteOpen(false)
-    toast.success(`Animal record for "${selectedAnimal.name}" deleted.`)
   }
 
   // Enhanced Filtering & Searching

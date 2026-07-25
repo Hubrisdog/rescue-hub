@@ -166,11 +166,15 @@ export function MedicalTreatments() {
     setIsDeleteOpen(true)
   }
 
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
     if (!selectedTreatment) return
-    store.deleteTreatment(selectedTreatment.id)
+    const err = await store.deleteTreatment(selectedTreatment.id)
+    if (err) {
+      toast.error(err)
+    } else {
+      toast.success('Medical treatment record deleted.')
+    }
     setIsDeleteOpen(false)
-    toast.success('Medical treatment record deleted.')
   }
 
   // Filtered Treatments List

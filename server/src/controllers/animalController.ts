@@ -167,7 +167,7 @@ export const updateAnimal = async (req: Request, res: Response) => {
         notes: data.notes,
         sex: data.sex,
         age_estimate: data.estimated_age,
-        weight: data.weight ? parseFloat(data.weight) : undefined,
+        weight: data.weight !== undefined ? (parseFloat(data.weight) || 0) : undefined,
         condition: data.condition,
         status: data.status,
         photo_url: data.photo_url !== undefined ? saveBase64Image(data.photo_url) : undefined,
@@ -218,6 +218,11 @@ export const deleteAnimal = async (req: Request, res: Response) => {
 
     res.json({ message: 'Animal deleted successfully' })
   } catch (error: any) {
+    if (error.code === 'P2003') {
+      return res.status(400).json({
+        message: 'Cannot delete animal: It has active medical treatment logs or rescue records associated with it.'
+      })
+    }
     res.status(500).json({ message: error.message })
   }
 }

@@ -167,11 +167,15 @@ export function Rescuers() {
     setIsDeleteOpen(true)
   }
 
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
     if (!selectedPersonnel) return
-    store.deleteRescuer(selectedPersonnel.id)
+    const err = await store.deleteRescuer(selectedPersonnel.id)
+    if (err) {
+      toast.error(err)
+    } else {
+      toast.success(`Personnel profile '${selectedPersonnel.name}' removed from roster.`)
+    }
     setIsDeleteOpen(false)
-    toast.success(`Personnel profile '${selectedPersonnel.name}' removed from roster.`)
   }
 
   // Calculated Summary Statistics

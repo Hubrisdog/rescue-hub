@@ -185,11 +185,15 @@ export function IncidentReports() {
     setIsDeleteOpen(true)
   }
 
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
     if (!selectedIncident) return
-    store.deleteIncident(selectedIncident.id)
+    const err = await store.deleteIncident(selectedIncident.id)
+    if (err) {
+      toast.error(err)
+    } else {
+      toast.success('Incident report removed.')
+    }
     setIsDeleteOpen(false)
-    toast.success('Incident report removed.')
   }
 
   // Filtered List
