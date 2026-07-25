@@ -204,7 +204,7 @@ export function MedicalTreatments() {
       } else if (chipFilter === 'FollowUpToday') {
         matchesChip = !!t.follow_up_date && t.follow_up_date.startsWith(todayStr)
       } else if (chipFilter === 'Completed') {
-        matchesChip = animal?.status === 'Recovered' || animal?.status === 'Adopted' || animal?.status === 'Released'
+        matchesChip = animal?.status === 'Recovered' || animal?.status === 'Adopted' || animal?.status === 'Released' || animal?.status === 'Ready for Adoption' || animal?.status === 'Ready for Release'
       }
 
       const matchesVet = vetFilter === 'All' || t.veterinarian === vetFilter
@@ -481,7 +481,7 @@ export function MedicalTreatments() {
                   (s) => s.id === animal?.shelter_id || String(s.id || '').replace(/^sh-/, '') === rawShelterId
                 )
 
-                const progress = getRecoveryProgress(animal?.status || 'Intake', animal?.condition)
+                const progress = getRecoveryProgress(animal?.status || 'Intake', animal?.condition, t.recommendation)
 
                 return (
                   <TableRow

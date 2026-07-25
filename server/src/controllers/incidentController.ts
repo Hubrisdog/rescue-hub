@@ -12,6 +12,7 @@ export const getIncidents = async (req: Request, res: Response) => {
     const mapped = incidents.map(inc => ({
       id: `inc-${inc.id}`,
       reporter_name: inc.reporter_name || 'Anonymous',
+      contact_number: inc.contact_number || '',
       report_date: inc.created_at.toISOString(),
       location: inc.location,
       description: inc.description,
@@ -68,6 +69,7 @@ export const createIncident = async (req: Request, res: Response) => {
     res.status(201).json({
       id: `inc-${newIncident.id}`,
       reporter_name: newIncident.reporter_name,
+      contact_number: newIncident.contact_number || '',
       report_date: newIncident.created_at.toISOString(),
       location: newIncident.location,
       description: newIncident.description,
@@ -110,6 +112,7 @@ export const updateIncident = async (req: Request, res: Response) => {
     res.json({
       id: `inc-${updated.id}`,
       reporter_name: updated.reporter_name,
+      contact_number: updated.contact_number || '',
       report_date: updated.created_at.toISOString(),
       location: updated.location,
       description: updated.description,
@@ -176,10 +179,16 @@ export const promoteIncident = async (req: Request, res: Response) => {
       let teamId = null
       if (parsedRescuerId) {
         const agent = await tx.agent.findUnique({
-          where: { id: parsedRescuerId }
+          where: { id: parsedRescuerId },
+          include: { role: true }
         })
-        if (agent && agent.team_id) {
-          teamId = agent.team_id
+        if (agent) {
+          if (agent.team_id) {
+            teamId = agent.team_id
+          } else {
+            const roleName = agent.role?.role_name
+            teamId = roleName === 'Veterinarian' ? 3 : roleName === 'Dispatcher' ? 2 : 1
+          }
         }
       }
 

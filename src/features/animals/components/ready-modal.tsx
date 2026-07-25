@@ -34,7 +34,7 @@ export function ReadyModal({
   if (!type) return null
 
   const isWild = (species: string) =>
-    ['Bird', 'Reptile', 'Snake', 'Monkey'].includes(species)
+    ['bird', 'reptile', 'snake', 'monkey', 'wild'].includes((species || '').toLowerCase())
 
   const filtered = animals.filter((a) => {
     if (type === 'adoption') {

@@ -27,14 +27,14 @@ export function AnimalStatsHeader({ animals, onSelectAnimal }: AnimalStatsHeader
   const underTreatmentCount = animals.filter((a) => a.status === 'Under Treatment').length
 
   const isWild = (species: string) =>
-    ['Bird', 'Reptile', 'Snake', 'Monkey'].includes(species)
+    ['bird', 'reptile', 'snake', 'monkey', 'wild'].includes((species || '').toLowerCase())
 
   const readyForAdoptionCount = animals.filter(
-    (a) => a.status === 'Recovered' && !isWild(a.species)
+    (a) => a.status === 'Ready for Adoption' || (a.status === 'Recovered' && !isWild(a.species))
   ).length
 
   const readyForReleaseCount = animals.filter(
-    (a) => a.status === 'Recovered' && isWild(a.species)
+    (a) => a.status === 'Ready for Release' || (a.status === 'Recovered' && isWild(a.species))
   ).length
 
   const adoptedCount = animals.filter((a) => a.status === 'Adopted').length

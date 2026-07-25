@@ -136,7 +136,11 @@ export function RescueCases() {
   const handleOpenEdit = (c: RescueCase) => {
     setSelectedCase(c)
     setEditStatus(c.status)
-    setEditRescuerId(c.rescuer_id || '')
+    const teamIdStr = c.rescuer_id ? c.rescuer_id.replace(/^res-/, 'team-') : ''
+    const teamRescuer = store.rescuers.find(
+      (r) => r.team_id === teamIdStr || r.team_id === c.rescuer_id || r.id === c.rescuer_id
+    )
+    setEditRescuerId(teamRescuer ? teamRescuer.id : '')
     setEditShelterId(c.shelter_id || '')
     setEditSeverity(c.severity)
     setEditNotes(c.notes || '')
@@ -157,6 +161,9 @@ export function RescueCases() {
       notes: editNotes,
       location: editLocation,
       description: editDescription,
+      rescue_date: (['RESCUED', 'SHELTER_INTAKE', 'UNDER_TREATMENT', 'RECOVERED', 'ADOPTED', 'RELEASED', 'CLOSED'].includes(editStatus) && !selectedCase.rescue_date)
+        ? new Date().toISOString()
+        : selectedCase.rescue_date
     })
 
     if (err) {
@@ -189,8 +196,12 @@ export function RescueCases() {
       const rawCaseRescuerId = (c.rescuer_id || '').replace(/^(res|agt)-/, '')
       const rawCaseShelterId = (c.shelter_id || '').replace(/^sh-/, '')
 
+      const teamIdStr = c.rescuer_id ? c.rescuer_id.replace(/^res-/, 'team-') : ''
       const rescuer = store.rescuers.find(
-        (r) => r.id === c.rescuer_id || r.id.replace(/^(res|agt)-/, '') === rawCaseRescuerId
+        (r) =>
+          r.id === c.rescuer_id ||
+          r.id.replace(/^(res|agt)-/, '') === rawCaseRescuerId ||
+          (teamIdStr && r.team_id === teamIdStr)
       )
 
       const shelter = store.shelters.find(

@@ -171,7 +171,8 @@ export const updateAnimal = async (req: Request, res: Response) => {
         condition: data.condition,
         status: data.status,
         photo_url: data.photo_url !== undefined ? saveBase64Image(data.photo_url) : undefined,
-        shelter_id: data.shelter_id !== undefined ? parseId(data.shelter_id) : undefined
+        shelter_id: data.shelter_id !== undefined ? parseId(data.shelter_id) : undefined,
+        ticket_id: data.case_id !== undefined ? parseId(data.case_id) : undefined
       }
     })
 

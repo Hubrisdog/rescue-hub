@@ -49,8 +49,12 @@ export function CaseDetailsDrawer({
   const rawCaseRescuerId = (rescueCase.rescuer_id || '').replace(/^(res|agt)-/, '')
   const rawCaseShelterId = (rescueCase.shelter_id || '').replace(/^sh-/, '')
 
+  const teamIdStr = rescueCase.rescuer_id ? rescueCase.rescuer_id.replace(/^res-/, 'team-') : ''
   const rescuer = store.rescuers.find(
-    (r) => r.id === rescueCase.rescuer_id || r.id.replace(/^(res|agt)-/, '') === rawCaseRescuerId
+    (r) =>
+      r.id === rescueCase.rescuer_id ||
+      r.id.replace(/^(res|agt)-/, '') === rawCaseRescuerId ||
+      (teamIdStr && r.team_id === teamIdStr)
   )
 
   const shelter = store.shelters.find(

@@ -226,7 +226,7 @@ export function Animals() {
         (treatment && (treatment.diagnosis.toLowerCase().includes(s) || treatment.veterinarian.toLowerCase().includes(s)))
 
       // Status Chip Filter
-      const isWild = ['Bird', 'Reptile', 'Snake', 'Monkey'].includes(a.species)
+      const isWild = ['bird', 'reptile', 'snake', 'monkey', 'wild'].includes((a.species || '').toLowerCase())
       let matchesChip = true
 
       if (statusChip === 'Under Treatment') {
@@ -249,11 +249,11 @@ export function Animals() {
       let matchesSpecies = true
       if (speciesFilter !== 'All') {
         if (speciesFilter === 'Reptiles') {
-          matchesSpecies = a.species === 'Reptile' || a.species === 'Snake'
+          matchesSpecies = ['reptile', 'snake'].includes((a.species || '').toLowerCase())
         } else if (speciesFilter === 'Others') {
-          matchesSpecies = !['Dog', 'Cat', 'Bird', 'Rabbit', 'Horse', 'Chicken', 'Reptile', 'Snake'].includes(a.species)
+          matchesSpecies = !['dog', 'cat', 'bird', 'rabbit', 'horse', 'chicken', 'reptile', 'snake'].includes((a.species || '').toLowerCase())
         } else {
-          matchesSpecies = a.species.toLowerCase() === speciesFilter.toLowerCase().replace(/s$/, '')
+          matchesSpecies = (a.species || '').toLowerCase() === speciesFilter.toLowerCase().replace(/s$/, '')
         }
       }
 
@@ -731,6 +731,8 @@ export function Animals() {
                     <option value='Intake'>Intake</option>
                     <option value='Under Treatment'>Under Treatment</option>
                     <option value='Recovered'>Recovered</option>
+                    <option value='Ready for Adoption'>Ready for Adoption</option>
+                    <option value='Ready for Release'>Ready for Release</option>
                     <option value='Adopted'>Adopted</option>
                     <option value='Released'>Released</option>
                   </select>
@@ -875,6 +877,8 @@ export function Animals() {
                       <option value='Intake'>Intake</option>
                       <option value='Under Treatment'>Under Treatment</option>
                       <option value='Recovered'>Recovered</option>
+                      <option value='Ready for Adoption'>Ready for Adoption</option>
+                      <option value='Ready for Release'>Ready for Release</option>
                       <option value='Adopted'>Adopted</option>
                       <option value='Released'>Released</option>
                     </select>

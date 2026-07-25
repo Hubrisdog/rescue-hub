@@ -94,7 +94,7 @@ export function AccountForm() {
     // 2. Session Expiration Countdown Timer
     const timer = setInterval(() => {
       const exp = auth.user?.exp || 0
-      const diff = exp * 1000 - Date.now()
+      const diff = exp - Date.now()
       if (diff <= 0) {
         setSessionTimeLeft('Expired')
         clearInterval(timer)

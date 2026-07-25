@@ -31,6 +31,7 @@ export type RescuerAvailabilityType = 'Available' | 'Busy' | 'On Leave'
 export interface IncidentReport {
   id: string
   reporter_name: string
+  contact_number?: string
   report_date: string
   location: string
   description: string
@@ -334,7 +335,8 @@ export const useRescueHubStore = create<RescueHubState>()((set, get) => {
             description: caseData.description,
             priority: caseData.severity,
             current_assigned_team_id: caseData.rescuer_id,
-            rescue_notes: caseData.notes
+            rescue_notes: caseData.notes,
+            rescue_date: caseData.rescue_date
           })
         })
         get().fetchInitialData()
@@ -363,7 +365,8 @@ export const useRescueHubStore = create<RescueHubState>()((set, get) => {
           shelter_id: data.shelter_id,
           notes: data.notes,
           severity: data.severity,
-          description: data.description
+          description: data.description,
+          rescue_date: data.rescue_date
         })
       }).then(() => {
         get().fetchInitialData()

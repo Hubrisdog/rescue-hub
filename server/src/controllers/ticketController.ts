@@ -53,7 +53,7 @@ export const getTickets = async (req: Request, res: Response) => {
 }
 
 export const createTicket = async (req: Request, res: Response) => {
-  const { subject, description, priority, current_assigned_team_id, rescue_notes } = req.body
+  const { subject, description, priority, current_assigned_team_id, rescue_notes, rescue_date } = req.body
 
   try {
     const ticket = await prisma.ticket.create({
@@ -63,7 +63,8 @@ export const createTicket = async (req: Request, res: Response) => {
         priority: priority || 'Medium',
         status: 'REPORTED',
         rescue_notes: rescue_notes || '',
-        current_assigned_team_id: parseId(current_assigned_team_id)
+        current_assigned_team_id: parseId(current_assigned_team_id),
+        rescue_date: rescue_date ? new Date(rescue_date) : null
       }
     })
 
@@ -90,7 +91,7 @@ export const createTicket = async (req: Request, res: Response) => {
 
 export const updateTicket = async (req: Request, res: Response) => {
   const { id } = req.params
-  const { status, rescuer_id, shelter_id, notes, severity, description } = req.body
+  const { status, rescuer_id, shelter_id, notes, severity, description, rescue_date } = req.body
 
   try {
     const parsedId = parseId(id)
@@ -137,10 +138,25 @@ export const updateTicket = async (req: Request, res: Response) => {
 
     if (rescuer_id !== undefined) {
       const parsedRescuerId = parseId(rescuer_id)
-      updateData.current_assigned_team_id = parsedRescuerId
+      let teamId = null
+      if (parsedRescuerId) {
+        const agent = await prisma.agent.findUnique({
+          where: { id: parsedRescuerId },
+          include: { role: true }
+        })
+        if (agent) {
+          if (agent.team_id) {
+            teamId = agent.team_id
+          } else {
+            const roleName = agent.role?.role_name
+            teamId = roleName === 'Veterinarian' ? 3 : roleName === 'Dispatcher' ? 2 : 1
+          }
+        }
+      }
+      updateData.current_assigned_team_id = teamId
 
-      if (parsedRescuerId !== currentTicket.current_assigned_team_id) {
-        const team = parsedRescuerId ? await prisma.team.findUnique({ where: { id: parsedRescuerId } }) : null
+      if (teamId !== currentTicket.current_assigned_team_id) {
+        const team = teamId ? await prisma.team.findUnique({ where: { id: teamId } }) : null
         logs.push({
           entity_type: 'RescueCase',
           entity_id: currentTicket.id,
@@ -180,6 +196,12 @@ export const updateTicket = async (req: Request, res: Response) => {
 
     if (description !== undefined) {
       updateData.description = description
+    }
+
+    if (rescue_date !== undefined) {
+      updateData.rescue_date = rescue_date ? new Date(rescue_date) : null
+    } else if (status === 'RESCUED' && !currentTicket.rescue_date) {
+      updateData.rescue_date = new Date()
     }
 
     const updated = await prisma.ticket.update({

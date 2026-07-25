@@ -47,6 +47,25 @@ export function AnimalProfileDialog({
   const navigate = useNavigate()
   const userRole = useAuthStore((state) => state.auth.user?.role?.[0] || 'Rescuer')
 
+  const isWildSpecies = (sp: string) =>
+    ['bird', 'reptile', 'snake', 'monkey', 'wild'].includes((sp || '').toLowerCase())
+
+  const rawAnimalCaseId = (animal?.case_id || '').replace(/^case-/, '')
+  const rescueCase = store.cases.find(
+    (c) => c.id === animal?.case_id || c.id.replace(/^case-/, '') === rawAnimalCaseId
+  )
+
+  const rescuer = useMemo(() => {
+    if (!rescueCase?.rescuer_id) return null
+    // Extract team ID prefix format (e.g. res-1 -> team-1)
+    const teamIdStr = rescueCase.rescuer_id.replace(/^res-/, 'team-')
+    const teamRescuers = store.rescuers.filter(
+      (r) => r.team_id === teamIdStr || r.team_id === rescueCase.rescuer_id || r.id === rescueCase.rescuer_id
+    )
+    const actualRescuer = teamRescuers.find((r) => r.role === 'Rescuer')
+    return actualRescuer || teamRescuers[0] || null
+  }, [rescueCase, store.rescuers])
+
   if (!animal) return null
 
   const handleAdoptWorkflow = async () => {
@@ -95,22 +114,6 @@ export function AnimalProfileDialog({
     (s) => s.id === animal.shelter_id || s.id.replace(/^sh-/, '') === rawAnimalShelterId
   )
 
-  const rawAnimalCaseId = (animal.case_id || '').replace(/^case-/, '')
-  const rescueCase = store.cases.find(
-    (c) => c.id === animal.case_id || c.id.replace(/^case-/, '') === rawAnimalCaseId
-  )
-
-  const rescuer = useMemo(() => {
-    if (!rescueCase?.rescuer_id) return null
-    // Extract team ID prefix format (e.g. res-1 -> team-1)
-    const teamIdStr = rescueCase.rescuer_id.replace(/^res-/, 'team-')
-    const teamRescuers = store.rescuers.filter(
-      (r) => r.team_id === teamIdStr || r.team_id === rescueCase.rescuer_id || r.id === rescueCase.rescuer_id
-    )
-    const actualRescuer = teamRescuers.find((r) => r.role === 'Rescuer')
-    return actualRescuer || teamRescuers[0] || null
-  }, [rescueCase, store.rescuers])
-
   // Robust Latest treatment lookup
   const animalTreatments = store.treatments
     .filter((t) => {
@@ -143,7 +146,7 @@ export function AnimalProfileDialog({
           </Badge>
         )
       case 'Recovered':
-        const isWild = ['Bird', 'Reptile', 'Snake', 'Monkey'].includes(animal.species)
+        const isWild = isWildSpecies(animal.species)
         return isWild ? (
           <Badge className='bg-teal-500/15 text-teal-600 dark:text-teal-400 border-teal-500/30 gap-1.5 py-1 px-3 text-xs font-semibold'>
             <Trees className='h-3.5 w-3.5' /> 🌿 Ready for Release
@@ -179,11 +182,11 @@ export function AnimalProfileDialog({
       done: ['Under Treatment', 'Recovered', 'Adopted', 'Released'].includes(animal.status),
     },
     {
-      label: ['Bird', 'Reptile', 'Snake', 'Monkey'].includes(animal.species) ? 'Ready for Release' : 'Ready for Adoption',
+      label: isWildSpecies(animal.species) ? 'Ready for Release' : 'Ready for Adoption',
       done: ['Recovered', 'Adopted', 'Released'].includes(animal.status),
     },
     {
-      label: ['Bird', 'Reptile', 'Snake', 'Monkey'].includes(animal.species) ? 'Released' : 'Adopted',
+      label: isWildSpecies(animal.species) ? 'Released' : 'Adopted',
       done: ['Adopted', 'Released'].includes(animal.status),
     },
   ]
@@ -437,7 +440,7 @@ export function AnimalProfileDialog({
 
           <div className='flex items-center gap-2'>
             {animal.status === 'Recovered' && (userRole === 'Admin' || userRole === 'Shelter Staff') && (
-              ['Bird', 'Reptile', 'Snake', 'Monkey'].includes(animal.species) ? (
+              isWildSpecies(animal.species) ? (
                 <Button
                   onClick={handleSetReadyRelease}
                   className='text-xs gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold animate-pulse'
